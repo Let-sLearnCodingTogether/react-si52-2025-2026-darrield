@@ -14,12 +14,15 @@ interface Movie {
 
 function Movies() {
     const [movies, setMovies] = useState<Movie[]>([])
+    const [loading, setLoading] = useState<boolean>(true)
     
     const fetchMovies = useCallback(async() => {
+        setLoading(true)
         const response = await ApiClient.get("/movie")
 
         if(response.status == 200){
             setMovies(response.data.data)
+            setLoading(false)
         }
     }, [])
 
@@ -48,7 +51,12 @@ function Movies() {
                 <th>Nama Sutradara</th>
                 <th>Aksi</th>
             </thead>
-            <tbody className="table-group-divider">
+            <tbody>
+                {
+                    loading && <tr>
+                        <td colSpan={5}>Loading....</td>
+                    </tr>
+                }
                 {
                     movies.length > 0 && movies.map((movie, index) => {
                         return <tr key = {movie._id}>
