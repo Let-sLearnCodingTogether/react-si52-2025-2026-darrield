@@ -1,10 +1,69 @@
+import { useCallback, useEffect, useState } from "react"
 import { NavLink } from "react-router"
+import ApiClient from "../../utils/ApiClient"
 
+
+interface Movie {
+    _id : string,
+    judul : string,
+    tahunRilis : string,
+    sutradara : string,
+    createdAT : string,
+    updateAt : string
+}
 
 function Movies() {
-    return <div>
+    const [movies, setMovies] = useState<Movie[]>([])
+    
+    const fetchMovies = useCallback(async() => {
+        const response = await ApiClient.get("/movie")
+
+        if(response.status == 200){
+            setMovies(response.data.data)
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchMovies()
+    }, [fetchMovies])
+
+    const handleDelete = async(movieId : String) => {
+        const response = await ApiClient.delete(`/movie/${movieId}`)
+
+        if(response.status == 201){
+            fetchMovies()
+        }
+    } 
+    return <div className = "container mx-auto">
+    <div className=" d-flex justify-content-between mb-3">
         <h2>Movie Page</h2>
         <NavLink to = "/add-movie" className= "btn btn-primary" >Add Movie</NavLink>
+    </div>
+    <div>
+        <table className="table table-dark table-striped-columns">
+            <thead className="text-dark">
+                <th>No</th>
+                <th>Judul</th>
+                <th>Tahun Rilis</th>
+                <th>Nama Sutradara</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody className="table-group-divider">
+                {
+                    movies.length > 0 && movies.map((movie, index) => {
+                        return <tr key = {movie._id}>
+                            <td>{index + 1}</td>
+                            <td>{movie.judul}</td>
+                            <td>{movie.tahunRilis}</td>
+                            <td>{movie.sutradara}</td>
+                            <td><button className="btn btn-danger" onClick={() => handleDelete(movie._id)}>Delete</button></td>
+                        </tr>
+                    })
+                    
+                }
+            </tbody>
+        </table>
+    </div>
     </div>
 }
 
