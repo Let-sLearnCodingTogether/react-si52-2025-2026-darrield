@@ -1,8 +1,23 @@
 import { createBrowserRouter } from "react-router";
 
 const router = createBrowserRouter([
-    {
+    { 
         path : "/",
+        children : [
+            {
+                index : true,
+                lazy : {
+                    Component : async() => {
+                        const component = await import ("../pages/movies/auth/signup/SignUp.tsx")
+                        return component.default
+                    }
+                }
+            },
+        ]
+    },
+    {
+        
+        path : "/movies",
         children : [
             {
                 index : true,
