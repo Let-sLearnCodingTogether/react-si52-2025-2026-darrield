@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from "react"
 import { Button, Form } from "react-bootstrap"
 import ApiClient from "../../../../utils/ApiClient"
+import { NavLink } from "react-router"
+
 
 
 interface SignUpForm{
@@ -84,6 +86,7 @@ function SignUp() {
             <Button type="submit" variant="primary">
               Sign up
             </Button>
+            <NavLink to="/signin">Sign In</NavLink>
           </Form>
         </div>
       </div>
