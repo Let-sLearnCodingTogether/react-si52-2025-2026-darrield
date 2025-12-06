@@ -45,11 +45,13 @@ function Movies() {
     <div>
         <table className="table table-dark table-striped-columns">
             <thead className="text-dark">
+             <tr>
                 <th>No</th>
                 <th>Judul</th>
                 <th>Tahun Rilis</th>
                 <th>Nama Sutradara</th>
                 <th>Aksi</th>
+            </tr>   
             </thead>
             <tbody>
                 {

@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react"
 import { Button, Form } from "react-bootstrap"
 import ApiClient from "../../../../utils/ApiClient"
-import { NavLink } from "react-router"
+import { NavLink, useNavigate } from "react-router"
 
 interface SignInForm {
     email : string,
@@ -10,6 +10,8 @@ interface SignInForm {
 
 
 function SignIn(){
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
     const [form, setForm] = useState<SignInForm>({
         email : "",
         password : ""
@@ -32,8 +34,18 @@ function SignIn(){
             const response = await ApiClient.post('/signin', form)
             console.log(response);
 
+            if(response.status === 200) {
+
+                localStorage.setItem("AuthToken", response.data.data.token)
+                navigate("/movies", {
+                    replace : true
+                })
+            }
+
         } catch (error) {
             console.log(error);
+        } finally{
+            setIsLoading(false)
         }
 
 
@@ -65,8 +77,9 @@ function SignIn(){
             </Form.Group>
             
                 <div className="d-flex gap-5 mt-3">
-                    <Button type="submit" variant="primary">
-                        Sign In
+                    <Button type="submit" variant="primary"
+                    disabled={isLoading}>
+                        {isLoading ? "Loading..." : "Sign In"}
                     </Button>
 
                     <NavLink to="/" className="btn btn-link">

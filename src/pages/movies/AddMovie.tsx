@@ -10,6 +10,7 @@ interface FormMovie {
 }
 
 function AddMovie() {
+
     const [form, setForm] = useState<FormMovie>({
         judul : "",
         tahunRilis : "",
@@ -33,6 +34,8 @@ function AddMovie() {
         try{
             const response = await ApiClient.post('/movie', form)
             console.log(response);
+
+
 
         } catch (error) {
             console.log(error);
